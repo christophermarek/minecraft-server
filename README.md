@@ -11,7 +11,7 @@ With this image, you can create a new PaperMC Minecraft server with one command 
 ```sudo docker run -p 25565:25565 -e EULA="true" phyremaster/papermc```
 
 While this command will work just fine in many cases, it is only the bare minimum required to start a functional server and can be vastly improved by specifying some...
-## Options
+## **Options**
 There are several command line options that users may want to specify when utilizing this image. These options are listed below with some brief explanation. An example will be provided with each. In the example, the part that the user can change will be surrounded by angle brackets (`< >`). Remember to *remove the angle brackets* before running the command.
 - Port
   - This option must be specified. Use port `25565` if you don't know what this is.
