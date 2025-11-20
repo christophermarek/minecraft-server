@@ -11,7 +11,12 @@ RUN apk update \
     && apk add bash \
     && apk add wget \
     && apk add jq \
-    && mkdir /papermc
+    && addgroup -S minecraft \
+    && adduser -S -G minecraft -u 1000 minecraft \
+    && mkdir /papermc \
+    && chown -R minecraft:minecraft /papermc
+
+USER minecraft
 
 # Start script
 CMD ["bash", "./start.sh"]
