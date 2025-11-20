@@ -3,7 +3,7 @@
 IMAGE_NAME ?= papermc-server
 CONTAINER_NAME ?= minecraft-server
 PORT ?= 25565
-WEBMAP_PORT ?= 8090
+WEBMAP_PORT ?= 8050
 SERVER_DIR ?= $(shell pwd)/server
 
 MC_VERSION ?= latest
