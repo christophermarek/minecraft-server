@@ -20,5 +20,3 @@ CMD ["bash", "./start.sh"]
 EXPOSE 25565/tcp
 EXPOSE 25565/udp
 VOLUME /papermc
-# Pl3xMap web map
-EXPOSE 8050/tcp
