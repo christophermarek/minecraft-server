@@ -3,6 +3,7 @@
 IMAGE_NAME ?= papermc-server
 CONTAINER_NAME ?= minecraft-server
 PORT ?= 25565
+BEDROCK_PORT ?= 19132
 SERVER_DIR ?= $(shell pwd)/server
 
 MC_VERSION ?= latest
@@ -25,6 +26,7 @@ start:
 	@docker run -dit \
 		--name $(CONTAINER_NAME) \
 		-p $(PORT):25565 \
+		-p $(BEDROCK_PORT):19132/udp \
 		-v $(SERVER_DIR):/papermc \
 		-e EULA=$(EULA) \
 		-e MC_VERSION=$(MC_VERSION) \
@@ -33,7 +35,9 @@ start:
 		$(if $(strip $(JAVA_OPTS)),-e JAVA_OPTS=$(JAVA_OPTS)) \
 		--restart on-failure \
 		$(IMAGE_NAME)
-	@echo "Server started! Connect to localhost:$(PORT)"
+	@echo "Server started!"
+	@echo "Java Edition: Connect to localhost:$(PORT)"
+	@echo "Bedrock Edition: Connect to localhost:$(BEDROCK_PORT)"
 	@echo "Server files: $(SERVER_DIR)"
 	@echo "Attaching to logs (Ctrl+C to exit, server keeps running)..."
 	@docker logs -f $(CONTAINER_NAME)
