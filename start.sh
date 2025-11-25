@@ -16,7 +16,7 @@ URL='https://api.papermc.io/v2/projects/paper'
 if [[ $MC_VERSION == latest ]]
 then
   # Get the latest MC version
-  MC_VERSION=$(wget -qO - "$URL" | jq -r '.versions[-1]')
+  MC_VERSION=$(wget -qO - "$URL" | jq -r '.versions[-1]') # "-r" is needed because the output has quotes otherwise
 fi
 URL="${URL}/versions/${MC_VERSION}"
 if [[ $PAPER_BUILD == latest ]]

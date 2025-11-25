@@ -38,18 +38,4 @@ To stop:
 
 ```bash
 make stop
-```
-
-## Adding Geyser for Cross-Platform Play
-
-To enable Bedrock Edition players to join:
-
-1. Download [Geyser-Spigot.jar](https://hangar.papermc.io/GeyserMC/Geyser)
-2. Download [Floodgate](https://hangar.papermc.io/GeyserMC/Floodgate) (optional, allows Bedrock players without Java accounts)
-3. Place both jars in `./server/plugins/`
-4. Restart the server with `make stop` and `make start`
-
-Configuration files will be generated in:
-- `./server/plugins/Geyser-Spigot/config.yml`
-- `./server/plugins/floodgate/config.yml`
-
+``
