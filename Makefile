@@ -1,4 +1,4 @@
-.PHONY: start stop restart logs console cmd setup-perms setup-spawn backup-now pregen
+.PHONY: start stop restart logs console cmd setup-perms setup-spawn spawn-town backup-now pregen
 
 COMPOSE ?= docker compose
 CONTAINER_NAME ?= minecraft-server
@@ -42,6 +42,10 @@ setup-perms:
 # Create the PvP-free WorldGuard region around world spawn (re-run after a world reset).
 setup-spawn:
 	@./scripts/setup-spawn.sh $(CONTAINER_NAME)
+
+# Make spawn a server-owned Towny town. An admin must be online: make spawn-town PLAYER=<name>
+spawn-town:
+	@./scripts/setup-spawn-town.sh $(PLAYER) $(CONTAINER_NAME)
 
 backup-now:
 	@$(COMPOSE) exec backup backup now

@@ -8,6 +8,7 @@ set -euo pipefail
 
 CONTAINER=${1:-minecraft-server}
 rcon() { docker exec "$CONTAINER" rcon-cli "$@" >/dev/null; }
+revoke() { local group=$1; shift; for perm in "$@"; do rcon "lp group $group permission unset $perm"; done; }
 grant() { local group=$1; shift; for perm in "$@"; do rcon "lp group $group permission set $perm true"; done; }
 deny() { local group=$1; shift; for perm in "$@"; do rcon "lp group $group permission set $perm false"; done; }
 
@@ -28,12 +29,14 @@ grant default \
   essentials.back essentials.back.ondeath essentials.spawn essentials.tpr \
   essentials.warp essentials.warp.list essentials.warps.* \
   essentials.balance essentials.balancetop essentials.pay essentials.sell essentials.worth \
-  essentials.kit essentials.kits.starter \
   essentials.msg essentials.r essentials.mail essentials.mail.send essentials.ignore \
   essentials.afk essentials.rules essentials.motd essentials.help essentials.list essentials.seen \
-  essentials.me essentials.helpop essentials.near essentials.getpos essentials.compass essentials.depth \
+  essentials.me essentials.helpop essentials.getpos essentials.compass essentials.depth \
   essentials.chat.url \
   auctionhouse.ah
+# Not for players on a PvP server: /near reveals who is close by, and the 'tools' kit (auto-given
+# on first join) has a 10s cooldown that would hand out free tools forever.
+revoke default essentials.near essentials.kit essentials.kits.starter essentials.kits.tools
 # PvP in the wild is mandatory: players must not be able to opt out with /pvp.
 deny default pvpmanager.command.pvp
 
@@ -51,4 +54,4 @@ grant mod \
 echo "Granting admin..."
 grant admin '*'
 
-echo "Done. Ranks: $(docker exec "$CONTAINER" rcon-cli 'lp listgroups' | tr -s ' ' | head -c 300)"
+echo "Done. Check with: make cmd C=\"lp group default permission info\" (output appears in make logs)"

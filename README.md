@@ -16,6 +16,7 @@ A community survival server: PaperMC 1.21.11 on the [itzg/minecraft-server](http
 | `make cmd C="..."` | Runs one console command, e.g. `make cmd C="lp user Steve parent set mod"`. |
 | `make setup-perms` | Creates the `default`/`mod`/`admin` ranks and their permissions. Run once after the first start. |
 | `make setup-spawn` | Creates the PvP-free spawn region around the world's spawn point. Re-run after a world reset. |
+| `make spawn-town PLAYER=<name>` | Makes spawn a server-owned town so players can't claim it. Needs that admin online. |
 | `make pregen` | Sets world borders (5,000-block radius) and pre-generates the world. Takes hours; run with nobody online. |
 | `make backup-now` | Takes a backup immediately. Automatic backups run every 6 hours into `./backups` and are kept 7 days. |
 
@@ -64,11 +65,15 @@ PvP is on in the world; these layers turn it off where people should be safe:
 
 ### Spawn town
 
-Make spawn a town owned by the server so nobody can claim it and its 5-chunk buffer:
+Make spawn a town owned by the server so nobody can claim it or the 5-chunk buffer around it. While you're online as an admin, run:
 
-1. Stand at spawn as an admin and run `/eco give <you> 1000`, `/t new Spawn`, `/ta givebonus Spawn 30` (lifts the claim limit), then `/t claim rect 2` (a 5×5-chunk square around you).
-2. `/ta set mayor Spawn npc` hands the town to an NPC mayor; then `/t leave` so you can found or join your own town.
-3. Optional: `/plot set embassy` on plots (as admin) and `/plot forsale <price>` lets players from any town buy a shop or base plot at spawn.
+```bash
+make spawn-town PLAYER=<your name>
+```
+
+It teleports you to spawn, founds a `Spawn` town there, claims a 5×5-chunk square, hands the town to an NPC mayor, and takes you back out of the town so you're free to found or join your own.
+
+Optional: stand on a plot at spawn and use `/plot set embassy` and `/plot forsale <price>` to let players from any town buy a shop or base plot there.
 
 ### How players claim land
 
