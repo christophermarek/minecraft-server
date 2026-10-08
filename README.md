@@ -76,7 +76,7 @@ Make spawn a town owned by the server so nobody can claim it and its 5-chunk buf
 - Expand: `/t claim` for the chunk you're in, `/t claim rect 2` for a square. Claims must touch your town unless you buy an outpost (`/t claim outpost`, $500).
 - Invite friends: `/t add <player>`; they accept with `/invite accept <town>`. Or `/t toggle open` so anyone can `/t join <town>`.
 - Each player can be in one town. Towns can team up: `/n new <name>` makes a nation, and `/n add <town>` invites others.
-- Group size is capped so no single clan dominates: 10 players per town, 3 towns or 20 players per nation, and 2 allied nations. Land only grows by recruiting (8 chunks per member). Tune these in `server/plugins/Towny/settings/config.yml` (`max_residents_per_town`, `max_towns_per_nation`, `max_residents_per_nation`, `max_allies`, `town_block_ratio`).
+- Towns grow by recruiting (8 chunks per member, plus 8 to start) up to a hard cap of **64 chunks** (e.g. an 8×8-chunk / 128×128-block area). Members are unlimited. Change the cap with `town_block_limit` in `server/plugins/Towny/settings/config.yml`.
 - Towns must keep 5 chunks between their land and other towns' land, so nobody can box you in.
 
 Towns cost $100 to found and $25 per extra chunk, with no daily upkeep. A town can claim 8 chunks per resident plus 8 bonus chunks, so a solo player gets 16 (a 64×64-block area is 16 chunks). Players start with $100 and earn more with `/sell` (prices in `server/plugins/Essentials/worth.yml`) and by trading on `/ah`.
