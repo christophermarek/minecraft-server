@@ -1,0 +1,49 @@
+# Modrinth plugins, installed by the itzg image on every start (MODRINTH_PROJECTS listing file).
+# Every entry is pinned to a version that supports Paper 1.21.11. Bump versions here deliberately.
+# A trailing `?` marks a plugin as optional: if it can't be resolved the server still starts.
+# Geyser and Floodgate are not here; they come from GeyserMC's download API (see docker-compose.yml).
+
+# --- Protocol bridge: the latest Geyser speaks Java 26.x, so ViaVersion translates it to 1.21.11.
+# Unpinned on purpose: it has to keep pace with Geyser, which always runs its latest build.
+viaversion
+
+# --- Core: permissions, economy API, placeholders ---
+luckperms:v5.5.71-bukkit
+vaultunlocked:2.20.3
+placeholderapi:2.12.3
+
+# --- /home /tpa /spawn /back /rtp /warp /kit /msg, economy, chat format ---
+essentialsx:2.22.0
+essentialsx-spawn:2.22.0
+essentialsx-chat-module:2.22.0
+tab-was-taken:6.2.0
+
+# --- Land claims + towns/nations (free) and safe spawn ---
+towny:0.103.2.0
+worldedit:7.4.5
+worldguard:7.0.17
+pvpmanager:4.0.22
+
+# --- Anti-grief logging + rollback ---
+coreprotect:24.1
+
+# --- Anticheat (Java players; Geyser/Bedrock players are exempted via Floodgate) ---
+grimac:2.3.74-f5bbe9c
+
+# --- World border pre-generation ---
+chunky:1.4.40
+
+# --- Live web map + town markers ---
+bluemap?:5.16-paper
+bluemap-towny?:2.4.0
+
+# --- Player stats (web) + in-game leaderboards ---
+plan?:5.8+build.3638
+decentholograms?:2.10.1
+ajleaderboards?:2.11.0-b338
+
+# --- Auction house (/ah) ---
+auction-house-plugin:1.5.5
+
+# --- Clips: rolling per-player replay buffer, saved with /replay clip save <player> ---
+flashback-server?:1.2.2

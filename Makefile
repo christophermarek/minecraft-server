@@ -1,56 +1,51 @@
-.PHONY: start stop console
+.PHONY: start stop restart logs console cmd setup-perms setup-spawn backup-now pregen
 
-IMAGE_NAME ?= papermc-server
+COMPOSE ?= docker compose
 CONTAINER_NAME ?= minecraft-server
-PORT ?= 25565
-BEDROCK_PORT ?= 19132
-SERVER_DIR ?= $(shell pwd)/server
 
-MC_VERSION ?= latest
-PAPER_BUILD ?= latest
-EULA ?= true
-MC_RAM ?=
-JAVA_OPTS ?=
+# Generate .env (gitignored) with a random RCON password on first run.
+.env:
+	@echo "RCON_PASSWORD=$$(openssl rand -hex 16)" > .env
+	@echo "Created .env with a random RCON password."
 
-start:
-	@echo "Building Docker image..."
-	@docker build -t $(IMAGE_NAME) .
-	@mkdir -p $(SERVER_DIR)
-	@echo "Fixing permissions..."
-	@docker run --rm \
-		-v $(SERVER_DIR):/papermc \
-		--user root \
-		alpine:latest \
-		sh -c "chown -R 1000:1000 /papermc || true"
-	@echo "Starting Minecraft server..."
-	@docker run -dit \
-		--name $(CONTAINER_NAME) \
-		-p $(PORT):25565 \
-		-p $(BEDROCK_PORT):19132/udp \
-		-v $(SERVER_DIR):/papermc \
-		-e EULA=$(EULA) \
-		-e MC_VERSION=$(MC_VERSION) \
-		-e PAPER_BUILD=$(PAPER_BUILD) \
-		$(if $(strip $(MC_RAM)),-e MC_RAM=$(MC_RAM)) \
-		$(if $(strip $(JAVA_OPTS)),-e JAVA_OPTS=$(JAVA_OPTS)) \
-		--restart on-failure \
-		$(IMAGE_NAME)
-	@echo "Server started!"
-	@echo "Java Edition: Connect to localhost:$(PORT)"
-	@echo "Bedrock Edition: Connect to localhost:$(BEDROCK_PORT)"
-	@echo "Server files: $(SERVER_DIR)"
+start: .env
+	@mkdir -p server backups
+	@$(COMPOSE) up -d
+	@echo "Java Edition:    localhost:25565"
+	@echo "Bedrock Edition: localhost:19132"
+	@echo "Live map:        http://localhost:8100"
+	@echo "Player stats:    http://localhost:8804"
 	@echo "Attaching to logs (Ctrl+C to exit, server keeps running)..."
-	@docker logs -f $(CONTAINER_NAME)
+	@$(COMPOSE) logs -f mc
 
 stop:
-	@echo "Stopping and cleaning up server..."
-	@docker stop $(CONTAINER_NAME) || true
-	@docker rm $(CONTAINER_NAME) || true
-	@docker rmi $(IMAGE_NAME) || true
-	@echo "Server stopped and cleaned (world data preserved in: $(SERVER_DIR))"
+	@$(COMPOSE) down
+
+restart: .env
+	@$(COMPOSE) restart mc
+
+logs:
+	@$(COMPOSE) logs -f mc
 
 console:
-	@echo "Attaching to Minecraft server console..."
-	@echo "Type 'stop' to stop the server, or Ctrl+P then Ctrl+Q to detach without stopping"
+	@echo "Ctrl+P then Ctrl+Q to detach without stopping the server."
 	@docker attach $(CONTAINER_NAME)
 
+# Run one console command, e.g. make cmd C="lp user Steve parent set staff"
+cmd:
+	@docker exec $(CONTAINER_NAME) rcon-cli $(C)
+
+# Grant ranks/permissions (idempotent; safe to re-run after editing the script).
+setup-perms:
+	@./scripts/setup-permissions.sh $(CONTAINER_NAME)
+
+# Create the PvP-free WorldGuard region around world spawn (re-run after a world reset).
+setup-spawn:
+	@./scripts/setup-spawn.sh $(CONTAINER_NAME)
+
+backup-now:
+	@$(COMPOSE) exec backup backup now
+
+# Set the world borders and pre-generate everything inside them. Run with no players online.
+pregen:
+	@./scripts/pregen.sh $(CONTAINER_NAME)

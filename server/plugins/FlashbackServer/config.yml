@@ -1,0 +1,23 @@
+clips:
+  # Length of the rolling clip buffer, in seconds.
+  # When a clip is saved, the output will contain approximately window-seconds to
+  # 2×window-seconds of footage due to keyframe granularity (keyframes are inserted
+  # periodically, so the precise start point is rounded back to the nearest keyframe).
+  # Default: 30
+  window-seconds: 30
+
+  # Automatically save a clip when an armed player dies.
+  # Only players that have been armed via "/replay clip arm <player>" are affected.
+  # The clip is saved to plugins/FlashbackServer/clips/<name>-clip-N.flashback.
+  # Default: true
+  auto-clip-on-death: true
+
+telemetry:
+  # Anonymous, opt-out usage telemetry (no player data, no IPs). Set to false to disable.
+  # Sent: server platform/version, plugin version, recording/clip counts & sizes, error class names.
+  enabled: false
+  posthog:
+    # PostHog ingestion host. EU Cloud by default; use https://us.i.posthog.com for a US-region project.
+    host: "https://eu.i.posthog.com"
+    # PostHog project API key (public/write-only). Replace with your own project's key.
+    project-key: "phc_zdMj4p5wo8EvfVApjb2EbfUHJ76zgYGM5wAGz5YJC359"

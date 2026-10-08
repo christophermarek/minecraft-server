@@ -1,7 +1,7 @@
 *.jar
-world/
-world_nether/
-world_the_end/
+/world/
+/world_nether/
+/world_the_end/
 logs/
 cache/
 usercache.json
@@ -9,3 +9,39 @@ versions/
 libraries/
 .console_history
 
+plugins/.paper-remapped/
+plugins/spark/tmp/
+plugins/bStats/
+/bluemap/
+.paper-remapped/
+
+# Secrets: never commit these
+plugins/floodgate/key.pem
+plugins/Geyser-Spigot/extensions/mcxboxbroadcast/cache.json
+plugins/Geyser-Spigot/extensions/mcxboxbroadcast/*.db
+plugins/Geyser-Spigot/extensions/.mcxboxbroadcast-release
+
+# Plugin runtime data (databases, caches, libraries, recordings) – backed up by mc-backup, not git
+*.db
+*.mv.db
+*.sqlite
+wepif.yml
+plugins/*/libs/
+plugins/*/libraries/
+plugins/*/logs/
+plugins/*/cache/
+plugins/update/
+plugins/faststats/
+plugins/Towny/data/
+plugins/Towny/backup/
+plugins/Essentials/userdata/
+plugins/AuctionHouse/data/
+plugins/Chunky/tasks/
+plugins/FlashbackServer/clips/
+plugins/FlashbackServer/replays/
+plugins/GrimAC/data/
+plugins/GrimAC/databases/
+plugins/Plan/public_html/
+plugins/WorldEdit/.archive-unpack/
+plugins/WorldEdit/sessions/
+plugins/LuckPerms/*.json.gz

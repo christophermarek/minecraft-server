@@ -1,0 +1,84 @@
+# PaperMC community server on the itzg/minecraft-server image.
+# Plugins are declared in config/plugins.txt and installed/updated by the image on every start.
+# Secrets (RCON password) live in .env, which `make start` generates on first run.
+
+services:
+  # Downloads Geyser extensions (not plugins, so the itzg image can't install them) before the server starts.
+  geyser-extensions:
+    image: alpine:3.22
+    user: "1000:1000"
+    volumes:
+      - ${SERVER_DIR:-./server}:/data
+    command:
+      - sh
+      - -ec
+      - |
+        dir=/data/plugins/Geyser-Spigot/extensions
+        mkdir -p "$$dir"
+        jar="$$dir/MCXboxBroadcastExtension.jar"
+        url=https://github.com/MCXboxBroadcast/Broadcaster/releases/download/${MCXBOXBROADCAST_RELEASE:-159}/MCXboxBroadcastExtension.jar
+        marker="$$dir/.mcxboxbroadcast-release"
+        if [ "$$(cat "$$marker" 2>/dev/null)" != "${MCXBOXBROADCAST_RELEASE:-159}" ]; then
+          wget -q -O "$$jar.tmp" "$$url" && mv "$$jar.tmp" "$$jar"
+          echo "${MCXBOXBROADCAST_RELEASE:-159}" > "$$marker"
+        fi
+
+  mc:
+    # Java 25 variant: WorldEdit 7.4.5 / WorldGuard 7.0.17 require it.
+    image: itzg/minecraft-server:2026.9.2-java25
+    container_name: ${CONTAINER_NAME:-minecraft-server}
+    depends_on:
+      geyser-extensions:
+        condition: service_completed_successfully
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    stop_grace_period: 2m
+    ports:
+      - "${PORT:-25565}:25565/tcp"
+      - "${BEDROCK_PORT:-19132}:19132/udp"
+      # Web UIs are bound to localhost only. Put a reverse proxy / tunnel in front to share them.
+      - "127.0.0.1:${BLUEMAP_PORT:-8100}:8100"  # BlueMap live map
+      - "127.0.0.1:${PLAN_PORT:-8804}:8804"     # Plan player stats
+    environment:
+      EULA: "TRUE"
+      TYPE: PAPER
+      # Pinned. Never use LATEST: it now resolves to 26.x and world upgrades can't be undone.
+      VERSION: "1.21.11"
+      MEMORY: ${MC_RAM:-6G}
+      USE_AIKAR_FLAGS: "true"
+      TZ: ${TZ:-America/Toronto}
+      RCON_PASSWORD: ${RCON_PASSWORD:?run `make start` (or create .env) to generate RCON_PASSWORD}
+      MODRINTH_PROJECTS: "@/extras/plugins.txt"
+      # Geyser must stay on its latest build because Bedrock clients auto-update.
+      PLUGINS: |
+        https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
+        https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
+      # server.properties values managed here; anything not listed is left as-is in server/server.properties.
+      MOTD: ${MOTD:-A Minecraft Community Server}
+      DIFFICULTY: hard
+      MAX_PLAYERS: "50"
+      VIEW_DISTANCE: "10"
+      SIMULATION_DISTANCE: "6"
+      SPAWN_PROTECTION: "0"  # spawn is protected by the WorldGuard "spawn" region instead
+    volumes:
+      - ${SERVER_DIR:-./server}:/data
+      - ./config:/extras:ro
+
+  backup:
+    image: itzg/mc-backup:2026.9.3
+    depends_on:
+      - mc
+    restart: unless-stopped
+    environment:
+      RCON_HOST: mc
+      RCON_PASSWORD: ${RCON_PASSWORD}
+      BACKUP_INTERVAL: ${BACKUP_INTERVAL:-6h}
+      INITIAL_DELAY: 5m
+      PRUNE_BACKUPS_DAYS: ${PRUNE_BACKUPS_DAYS:-7}
+      # Skip regenerable / bulky data: jars, logs, map tiles.
+      EXCLUDES: "*.jar,cache,logs,libraries,versions,bluemap"
+      TZ: ${TZ:-America/Toronto}
+    volumes:
+      - ${SERVER_DIR:-./server}:/data:ro
+      - ${BACKUP_DIR:-./backups}:/backups

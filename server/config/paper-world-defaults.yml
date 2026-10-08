@@ -16,8 +16,8 @@
 _version: 31
 anticheat:
   anti-xray:
-    enabled: false
-    engine-mode: 1
+    enabled: true
+    engine-mode: 2
     hidden-blocks:
     - copper_ore
     - deepslate_copper_ore
@@ -181,6 +181,7 @@ entities:
     - Motion
     - sleeping_pos
     iron-golems-can-spawn-in-air: false
+    max-arrow-despawn-invulnerability: 200
     monster-spawn-max-light-level: default
     non-player-arrow-despawn-rate: default
     per-player-mob-spawns: true
