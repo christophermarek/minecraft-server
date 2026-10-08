@@ -1,0 +1,23 @@
+regions:
+    __global__:
+        members: {}
+        flags: {}
+        owners: {}
+        type: global
+        priority: 0
+    spawn:
+        min: {x: -48, y: -64, z: -48}
+        max: {x: 47, y: 319, z: 47}
+        members: {}
+        flags:
+            pvp: deny
+            tnt: deny
+            creeper-explosion: deny
+            other-explosion: deny
+            fire-spread: deny
+            lava-fire: deny
+            greeting: '&aEntering spawn: PvP is disabled.'
+            farewell: '&cLeaving spawn: PvP is enabled in the wilderness!'
+        owners: {}
+        type: cuboid
+        priority: 10

@@ -45,3 +45,31 @@ plugins/Plan/public_html/
 plugins/WorldEdit/.archive-unpack/
 plugins/WorldEdit/sessions/
 plugins/LuckPerms/*.json.gz
+
+# Managed by the itzg image (docker-compose.yml env vars); contains the RCON password
+server.properties
+.rcon-cli.env
+.rcon-cli.yaml
+.paper.env
+.modrinth-manifest.json
+.papermc-manifest.json
+plugins/.var-list-manifest.json
+
+# Per-instance IDs and data
+plugins/FlashbackServer/.telemetry-id
+plugins/Essentials/*.bin
+plugins/Plan/
+plugins/*/translations/
+plugins/*/lang/
+plugins/Geyser-Spigot/locales/
+plugins/WorldEdit/assets/
+*.db-shm
+*.db-wal
+plugins/Essentials/items.json
+plugins/Essentials/custom_items.yml
+plugins/Essentials/upgrades-done.yml
+plugins/TAB/playerdata.yml
+plugins/TAB/users.yml
+plugins/TAB/skincache.yml
+plugins/ajLeaderboards/cache_storage.yml
+plugins/CoreProtect/.license

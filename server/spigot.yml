@@ -163,6 +163,8 @@ world-settings:
       entity: 50
     enable-zombie-pigmen-portal-spawns: true
     verbose: false
+  worldeditregentempworld:
+    verbose: false
 config-version: 12
 commands:
   log: true

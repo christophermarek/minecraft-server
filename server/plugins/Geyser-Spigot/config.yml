@@ -21,9 +21,61 @@ bedrock:
   # Since Minecraft: Bedrock Edition uses UDP, this port must allow UDP traffic.
   port: 19132
 
+  # The UDP port that NetherNet connections use. 0 means the same port as above.
+  # If raknet and nethernet transport mode are used in parallel, then this port has to be different to the port above.
+  webrtc-port: 0
+
+  # How Bedrock players connect. Changes require a restart.
+  # "nethernet" uses NetherNet (with signaling), which is the new connection method for Bedrock Edition.
+  # "both" accepts both NetherNet and RakNet. They each need their own UDP port: see "webrtc-port".
+  # "raknet" only accepts RakNet, the now deprecated connection method which will be removed in the future.
+  transport: raknet
+
   # Some hosting services change your Java port everytime you start the server and require the same port to be used for Bedrock.
   # This option makes the Bedrock port the same as the Java port every time you start the server.
   clone-remote-port: false
+
+  # Signaling is how Bedrock players find this server and start a NetherNet connection to it.
+  # Only used with the "nethernet" and "both" transports. Changes require a restart.
+  signaling:
+    # How Bedrock players find this server over NetherNet.
+    # "builtin": Geyser runs a local signaling server on the Bedrock port over TCP. This option is not compatible
+    # with running the Java server on the Bedrock port.
+    # "nxs": Geyser registers with the external signaling service configured below.
+    # "hybrid": uses both "builtin" and "nxs".
+    # "none" turns signaling off.
+    mode: builtin
+
+    # Settings for built-in signaling. Only used in the "builtin" and "hybrid" modes.
+    builtin:
+      # Serves signaling over HTTPS as well as HTTP, on the same port.
+      https:
+        # Path to a TLS certificate: either a PEM chain (with its key in "private-key"), or a PKCS12 file
+        # (leave "private-key" empty). Players reaching signaling over TLS are not shown the "trust on first use" prompt.
+        # Leave this empty to only serve plain HTTP.
+        certificate: ''
+
+        # PEM private key for "certificate". Leave empty when that is a PKCS12 file.
+        private-key: ''
+
+        # Password for the PKCS12 file, or for the PEM key if it is encrypted.
+        # Use "file:/path/to/password" to read it from a file instead, which is safer than writing it here.
+        password: ''
+
+    # Settings for the external signaling service. Only used in the "nxs" and "hybrid" modes, or when built-in signaling cannot run.
+    nxs:
+      # Additional public UDP endpoints players can reach this server on, e.g. 198.51.100.1:19133 or [2001:db8::1]:19133. Port forwarding is not set up for you.
+      advertise-addresses: []
+
+      # Access token for the signaling service, or file:/path/to/token to read it from a file. Leave empty to register without an account.
+      token: ''
+
+      # Address of the external signaling service (NXS). Defaults to warden.
+      endpoint: https://agent.warden.cloud
+
+      # Additional details sent to the signaling service, such as "region" or "pool" to choose where this server is listed.
+      # Other keys are sent as registration tags.
+      data: {}
 
 # Network settings for the Java server connection
 java:
@@ -62,11 +114,11 @@ gameplay:
   server-name: Geyser
 
   # Allow a fake cooldown indicator to be sent. Bedrock players otherwise do not see a cooldown as they still use 1.8 combat.
-  # Please note: if the cooldown is enabled, some users may see a black box during the cooldown sequence, like below:
+  # Please note: with the integrated pack disabled, some users may see a black box during the cooldown sequence, like below:
   # https://geysermc.org/img/external/cooldown_indicator.png
-  # This can be disabled by going into Bedrock settings under the accessibility tab and setting "Text Background Opacity" to 0
-  # This setting can be set to "title", "actionbar" or "disabled"
-  show-cooldown: title
+  # This can be resolved by enabling the integrated pack, or by going into Bedrock settings under the accessibility tab and setting "Text Background Opacity" to 0.
+  # This setting can be set to "crosshair", "hotbar", or "disabled"
+  cooldown-type: crosshair
 
   # Bedrock clients can freeze when opening up the command prompt for the first time if given a lot of commands.
   # Disabling this will prevent command suggestions from being sent and solve freezing for Bedrock clients.
@@ -85,6 +137,11 @@ gameplay:
 
   # Whether to show Bedrock Edition emotes to other Bedrock Edition players.
   emotes-enabled: true
+
+  # Whether to remove legacy text formatting codes sent by Bedrock players.
+  # Unlike on Java Edition, typing section signs for legacy color codes is possible on Bedrock Edition.
+  # See https://minecraft.wiki/w/Formatting_codes for further information.
+  block-legacy-codes: true
 
   # Which item to use to mark unavailable slots in a Bedrock player inventory. Examples of this are the 2x2 crafting grid while in creative,
   # or custom inventory menus with sizes different from the usual 3x9. A barrier block is the default item.
@@ -218,6 +275,10 @@ advanced:
     # IP addresses, subnets, and links to plain text files are supported.
     haproxy-protocol-whitelisted-ips: []
 
+    # Should be enabled if this Geyser instance is behind a WaterdogPE proxy. If enabled, Geyser will
+    # use the xuid / address sent from WaterdogPE and reject clients that do not send it.
+    use-waterdogpe-forwarding: false
+
     # The internet supports a maximum MTU of 1492 but could cause issues with packet fragmentation.
     # 1400 is the default.
     mtu: 1400
@@ -234,4 +295,4 @@ advanced:
 debug-mode: false
 
 # Do not change!
-config-version: 5
+config-version: 8
