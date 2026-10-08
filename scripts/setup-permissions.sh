@@ -26,7 +26,7 @@ echo "Granting default (all players)..."
 grant default \
   essentials.home essentials.sethome essentials.delhome essentials.sethome.multiple \
   essentials.tpa essentials.tpahere essentials.tpaccept essentials.tpdeny essentials.tpacancel \
-  essentials.back essentials.back.ondeath essentials.spawn essentials.tpr \
+  essentials.spawn essentials.tpr \
   essentials.warp essentials.warp.list essentials.warps.* \
   essentials.balance essentials.balancetop essentials.pay essentials.sell essentials.worth \
   essentials.msg essentials.r essentials.mail essentials.mail.send essentials.ignore \
@@ -36,7 +36,7 @@ grant default \
   auctionhouse.ah
 # Not for players on a PvP server: /near reveals who is close by, and the 'tools' kit (auto-given
 # on first join) has a 10s cooldown that would hand out free tools forever.
-revoke default essentials.near essentials.kit essentials.kits.starter essentials.kits.tools
+revoke default essentials.near essentials.kit essentials.kits.starter essentials.kits.tools essentials.back essentials.back.ondeath
 # PvP in the wild is mandatory: players must not be able to opt out with /pvp.
 deny default pvpmanager.command.pvp
 
@@ -53,5 +53,7 @@ grant mod \
 
 echo "Granting admin..."
 grant admin '*'
+# '*' would otherwise include these: no keep-inventory/XP on death and no /back, even for staff.
+deny admin essentials.keepinv essentials.keepxp essentials.back essentials.back.ondeath
 
 echo "Done. Check with: make cmd C=\"lp group default permission info\" (output appears in make logs)"

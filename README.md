@@ -39,7 +39,7 @@ Plugins are declared in [`config/plugins.txt`](config/plugins.txt), pinned to ve
 
 | Need | Plugin | Player commands |
 |---|---|---|
-| Homes, teleports, spawn, economy | EssentialsX (+ Spawn, Chat) | `/sethome`, `/home`, `/tpa`, `/tpaccept`, `/back`, `/spawn`, `/tpr`, `/bal`, `/pay`, `/sell` |
+| Homes, teleports, spawn, economy | EssentialsX (+ Spawn, Chat) | `/sethome`, `/home`, `/tpa`, `/tpaccept`, `/spawn`, `/tpr`, `/bal`, `/pay`, `/sell` |
 | Towns, nations, land claims | Towny | `/t new <name>`, `/t claim`, `/t add <player>`, `/n new <name>` |
 | Safe spawn | WorldGuard + WorldEdit | — |
 | Combat logging | PvPManager | `/pvpstatus`, `/tag` |
