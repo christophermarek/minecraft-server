@@ -71,7 +71,7 @@ Make spawn a town owned by the server so nobody can claim it or the 5-chunk buff
 make spawn-town PLAYER=<your name>
 ```
 
-It teleports you to spawn, founds a `Spawn` town there, claims a 5×5-chunk square, hands the town to an NPC mayor, and takes you back out of the town so you're free to found or join your own.
+It teleports you to spawn, founds a `Hub` town there (Towny reserves the name "Spawn"), claims a 5×5-chunk square, hands the town to an NPC mayor, and takes you back out of the town so you're free to found or join your own.
 
 Optional: stand on a plot at spawn and use `/plot set embassy` and `/plot forsale <price>` to let players from any town buy a shop or base plot there.
 

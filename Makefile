@@ -45,7 +45,7 @@ setup-spawn:
 
 # Make spawn a server-owned Towny town. An admin must be online: make spawn-town PLAYER=<name>
 spawn-town:
-	@./scripts/setup-spawn-town.sh $(PLAYER) $(CONTAINER_NAME)
+	@./scripts/setup-spawn-town.sh $(PLAYER) $(CONTAINER_NAME) $(or $(TOWN),Hub)
 
 backup-now:
 	@$(COMPOSE) exec backup backup now
