@@ -53,7 +53,7 @@ grant mod \
 
 echo "Granting admin..."
 grant admin '*'
-# '*' would otherwise include these: no keep-inventory/XP on death and no /back, even for staff.
-deny admin essentials.keepinv essentials.keepxp essentials.back essentials.back.ondeath
+# Admins keep '*' in full, including keep-inventory/XP on death and /back (players get neither).
+revoke admin essentials.keepinv essentials.keepxp essentials.back essentials.back.ondeath
 
 echo "Done. Check with: make cmd C=\"lp group default permission info\" (output appears in make logs)"
