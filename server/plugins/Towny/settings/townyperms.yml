@@ -68,6 +68,11 @@
 # The 'nomad' permissions are given to all players in all Towny worlds, townless and players who are part of a town.
 nomad:
 - towny.command.towny.map
+- towny.command.resident.toggle.map
+- towny.command.resident.toggle.townborder
+- towny.command.resident.toggle.plotborder
+- towny.command.resident.toggle.constantplotborder
+- towny.command.resident.toggle.bordertitles
 - towny.command.towny.prices
 - towny.command.towny.tree
 - towny.command.towny.time
